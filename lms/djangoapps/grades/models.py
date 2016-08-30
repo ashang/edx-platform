@@ -140,9 +140,6 @@ class VisibleBlocks(models.Model):
 
     objects = VisibleBlocksQuerySet.as_manager()
 
-    class Meta(object):
-        app_label = "grades"
-
     def __unicode__(self):
         """
         String representation of this model.

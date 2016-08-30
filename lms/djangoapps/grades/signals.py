@@ -123,14 +123,15 @@ def recalculate_subsection_grade_handler(sender, **kwargs):  # pylint: disable=u
        - course_id: Unicode string representing the course
        - usage_id: Unicode string indicating the courseware instance
     """
-    if not PersistentGradesEnabledFlag.feature_enabled():
-        return
     try:
         course_id = kwargs.get('course_id', None)
         usage_id = kwargs.get('usage_id', None)
         student = kwargs.get('user', None)
 
         course_key = CourseLocator.from_string(course_id)
+        if not PersistentGradesEnabledFlag.feature_enabled(course_key):
+            return
+
         usage_key = UsageKey.from_string(usage_id).replace(course_key=course_key)
 
         from lms.djangoapps.grades.new.subsection_grade import SubsectionGradeFactory

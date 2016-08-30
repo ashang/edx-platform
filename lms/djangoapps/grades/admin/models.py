@@ -3,6 +3,7 @@ Models defining feature flag controlling persistent grades globally
 and for specific courses.
 """
 from config_models.models import ConfigurationModel
+from django.db.models import BooleanField
 from xmodule_django.models import CourseKeyField
 
 
@@ -13,21 +14,23 @@ class PersistentGradesEnabledFlag(ConfigurationModel):
     must also have persistent grades enabled for the
     feature to take effect.
     """
+    # this field overrides course-specific settings to enable the feature for all courses
+    enabled_for_all_courses = BooleanField(default=False)
 
     @classmethod
     def feature_enabled(cls, course_id=None):
         """
-        Looks at the currently active configuration model to determine whether the subsection grades feature is
+        Looks at the currently active configuration model to determine whether the persistent grades feature is
         available.
 
         If the flag is not enabled, the feature is not available.
-        If the flag is enabled and the provided course_id is authorized,
+        If the flag is enabled and the provided course_id is for an course with persistent grades enabled,
             the feature is available.
-        If the flag is enabled and course-specific authorization is not required, the feature is available.
+        If the flag is enabled and no course ID is given, we return True since the global setting is enabled.
         """
         if not PersistentGradesEnabledFlag.is_enabled():
             return False
-        elif course_id:
+        elif not PersistentGradesEnabledFlag.current().enabled_for_all_courses and course_id:
             try:
                 return CoursePersistentGradesFlag.objects.get(course_id=course_id).enabled
             except CoursePersistentGradesFlag.DoesNotExist:
@@ -39,14 +42,14 @@ class PersistentGradesEnabledFlag(ConfigurationModel):
 
     def __unicode__(self):
         current_model = PersistentGradesEnabledFlag.current()
-        return u"SubsectionGradesFlag: enabled {}".format(
+        return u"PersistentGradesEnabledFlag: enabled {}".format(
             current_model.is_enabled()
         )
 
 
 class CoursePersistentGradesFlag(ConfigurationModel):
     """
-    Authorizes persistent grades for a specific
+    Enables persistent grades for a specific
     course. Only has an effect if the general
     flag above is set to True.
     """

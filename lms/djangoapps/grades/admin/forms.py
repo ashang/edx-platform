@@ -27,14 +27,11 @@ class CoursePersistentGradesAdminForm(forms.ModelForm):
         try:
             course_key = CourseLocator.from_string(cleaned_id)
         except InvalidKeyError:
-            msg = u'Course id invalid. Entered course id was: "{0}."' \
-                  u' Please recheck that you have supplied a valid course id.'.format(cleaned_id)
+            msg = u'Course id invalid. Entered course id was: "{0}."'.format(cleaned_id)
             raise forms.ValidationError(msg)
 
         if not modulestore().has_course(course_key):
-            msg = u'COURSE NOT FOUND'
-            msg += u' --- Entered course id was: "{0}". '.format(course_key.to_deprecated_string())
-            msg += 'Please recheck that you have supplied a valid course id.'
+            msg = u'Course not found. Entered course id was: "{0}". '.format(course_key.to_deprecated_string())
             raise forms.ValidationError(msg)
 
         return course_key

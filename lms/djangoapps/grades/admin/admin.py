@@ -9,8 +9,11 @@ from lms.djangoapps.grades.admin.models import CoursePersistentGradesFlag, Persi
 from lms.djangoapps.grades.admin.forms import CoursePersistentGradesAdminForm
 
 
-class CourseAuthorizationAdmin(KeyedConfigurationModelAdmin):
-    """Admin for enabling subsection grades on a course-by-course basis."""
+class CoursePersistentGradesAdmin(KeyedConfigurationModelAdmin):
+    """
+    Admin for enabling subsection grades on a course-by-course basis.
+    Allows searching by course id.
+    """
     form = CoursePersistentGradesAdminForm
     search_fields = ['course_id']
     fieldsets = (
@@ -20,5 +23,5 @@ class CourseAuthorizationAdmin(KeyedConfigurationModelAdmin):
         }),
     )
 
-admin.site.register(CoursePersistentGradesFlag, CourseAuthorizationAdmin)
+admin.site.register(CoursePersistentGradesFlag, CoursePersistentGradesAdmin)
 admin.site.register(PersistentGradesEnabledFlag, ConfigurationModelAdmin)
