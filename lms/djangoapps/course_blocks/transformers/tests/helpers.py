@@ -77,7 +77,6 @@ class CourseStructureTestCase(TransformerRegistryTestMixin, ModuleStoreTestCase)
         if parent:
             kwargs['parent'] = parent
 
-        print block_ref
         xblock = factory.create(
             display_name=self.create_block_id(block_type, block_ref),
             **kwargs

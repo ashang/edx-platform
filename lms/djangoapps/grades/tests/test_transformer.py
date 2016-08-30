@@ -171,7 +171,28 @@ class GradesTransformerTestCase(CourseStructureTestCase):
         ])
 
     def test_collect_containing_subsection(self):
+        expected_containing_subsection = {
+            'course': 0,
+            'chapter': 0,
+            'sub_A': 1,
+            'sub_B': 1,
+            'sub_C': 3,
+            'vert_1': 1,
+            'vert_2': 1,
+            'vert_3': 2,
+            'vert_A11': 1,
+            'prob_A1aa': 1,
+            'prob_BCb': 3,
+        }
         blocks = self.build_complicated_hypothetical_course()
+        block_structure = get_course_blocks(self.student, blocks[u'course'].location, self.transformers)
+        for block_ref, count in expected_containing_subsection.iteritems():
+            actual = block_structure.get_transformer_block_field(
+                blocks[block_ref].location,
+                self.TRANSFORMER_CLASS_TO_TEST,
+                'containing_subsections',
+            )
+            self.assertEqual(len(actual), count)
 
     def test_ungraded_block_collection(self):
         blocks = self.build_course_with_problems()
