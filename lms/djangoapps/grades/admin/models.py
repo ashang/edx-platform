@@ -1,3 +1,7 @@
+"""
+Models defining feature flag controlling persistent grades globally
+and for specific courses.
+"""
 from config_models.models import ConfigurationModel
 from xmodule_django.models import CourseKeyField
 
