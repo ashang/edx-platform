@@ -19,12 +19,3 @@ def set_persistent_grades_feature_flags(
     PersistentGradesEnabledFlag.objects.create(enabled=global_flag, enabled_for_all_courses=override_course_settings)
     if course_id:
         CoursePersistentGradesFlag.objects.create(course_id=course_id, enabled=course_setting)
-
-
-def set_course_specific_flag(course_id, course_setting):
-    """
-    Some tests set flags for multiple courses, so this
-    helper is provided to avoid unnecessarily setting the global
-    setting multiple times.
-    """
-    CoursePersistentGradesFlag.objects.create(course_id=course_id, enabled=course_setting)

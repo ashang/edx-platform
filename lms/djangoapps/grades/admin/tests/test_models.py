@@ -1,11 +1,21 @@
+"""
+Tests for the models within the admin section
+of the grades app. Currently this consists
+of Django admin settings for persistent grades.
+"""
 from lms.djangoapps.grades.admin.models import PersistentGradesEnabledFlag
-from lms.djangoapps.grades.admin.tests.utils import set_persistent_grades_feature_flags, set_course_specific_flag
+from lms.djangoapps.grades.admin.tests.utils import set_persistent_grades_feature_flags
 from django.test import TestCase
 from opaque_keys.edx.locator import CourseLocator
 
 
 class PersistentGradesFeatureFlagTests(TestCase):
+    """
+    Tests the behavior of the feature flags for persistent grading.
+    These are set via Django admin settings.
+    """
     def setUp(self):
+        super(PersistentGradesFeatureFlagTests)
         self.course_id_1 = CourseLocator(org="edx", course="course", run="run")
         self.course_id_2 = CourseLocator(org="edx", course="course2", run="run")
 

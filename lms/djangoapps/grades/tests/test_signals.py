@@ -206,7 +206,7 @@ class ScoreChangedUpdatesSubsectionGradeTest(ModuleStoreTestCase):
     def test_subsection_grade_updated_on_signal(self, default_store):
         with self.store.default_store(default_store):
             self.set_up_course()
-            with check_mongo_calls(2) and self.assertNumQueries(18):
+            with check_mongo_calls(2) and self.assertNumQueries(19):
                 recalculate_subsection_grade_handler(None, **self.score_changed_kwargs)
 
     @ddt.data(ModuleStoreEnum.Type.mongo, ModuleStoreEnum.Type.split)
@@ -215,7 +215,7 @@ class ScoreChangedUpdatesSubsectionGradeTest(ModuleStoreTestCase):
             self.set_up_course()
             ItemFactory.create(parent=self.sequential, category='problem', display_name='problem2')
             ItemFactory.create(parent=self.sequential, category='problem', display_name='problem3')
-            with check_mongo_calls(2) and self.assertNumQueries(18):
+            with check_mongo_calls(2) and self.assertNumQueries(19):
                 recalculate_subsection_grade_handler(None, **self.score_changed_kwargs)
 
     @ddt.data(ModuleStoreEnum.Type.mongo, ModuleStoreEnum.Type.split)
@@ -241,11 +241,11 @@ class ScoreChangedUpdatesSubsectionGradeTest(ModuleStoreTestCase):
                 SCORE_CHANGED.send(sender=None, **self.score_changed_kwargs)
 
     @ddt.data(
-        ('points_possible', 2, 18),
-        ('points_earned', 2, 18),
-        ('user', 0, 2),
-        ('course_id', 0, 1),
-        ('usage_id', 0, 1),
+        ('points_possible', 2, 19),
+        ('points_earned', 2, 19),
+        ('user', 0, 3),
+        ('course_id', 0, 0),
+        ('usage_id', 0, 2),
     )
     @ddt.unpack
     def test_missing_kwargs(self, kwarg, expected_mongo_calls, expected_sql_calls):
