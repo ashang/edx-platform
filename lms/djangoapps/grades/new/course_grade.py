@@ -7,7 +7,7 @@ from django.conf import settings
 from lazy import lazy
 from logging import getLogger
 from lms.djangoapps.course_blocks.api import get_course_blocks
-from lms.djangoapps.grades.models import PersistentGradesEnabledFlag
+from lms.djangoapps.grades.admin.models import PersistentGradesEnabledFlag
 from openedx.core.djangoapps.signals.signals import GRADES_UPDATED
 from xmodule import block_metadata_utils
 

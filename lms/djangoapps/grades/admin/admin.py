@@ -5,8 +5,8 @@ from django.contrib import admin
 
 from config_models.admin import ConfigurationModelAdmin, KeyedConfigurationModelAdmin
 
-from lms.djangoapps.grades.models import CoursePersistentGradesFlag, PersistentGradesEnabledFlag
-from lms.djangoapps.grades.forms import CoursePersistentGradesAdminForm
+from lms.djangoapps.grades.admin.models import CoursePersistentGradesFlag, PersistentGradesEnabledFlag
+from lms.djangoapps.grades.admin.forms import CoursePersistentGradesAdminForm
 
 
 class CourseAuthorizationAdmin(KeyedConfigurationModelAdmin):

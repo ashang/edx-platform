@@ -5,7 +5,7 @@ Tests for the score change signals defined in the courseware models module.
 import ddt
 from unittest import skip
 from django.test import TestCase
-from lms.djangoapps.grades.models import PersistentGradesEnabledFlag, CoursePersistentGradesFlag
+from lms.djangoapps.grades.admin.models import PersistentGradesEnabledFlag, CoursePersistentGradesFlag
 from mock import patch, MagicMock
 from student.models import anonymous_id_for_user
 from student.tests.factories import UserFactory

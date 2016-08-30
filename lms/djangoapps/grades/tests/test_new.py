@@ -9,7 +9,7 @@ from mock import patch
 from capa.tests.response_xml_factory import MultipleChoiceResponseXMLFactory
 from courseware.tests.helpers import get_request_for_user
 from lms.djangoapps.course_blocks.api import get_course_blocks
-from lms.djangoapps.grades.models import PersistentGradesEnabledFlag, CoursePersistentGradesFlag
+from lms.djangoapps.grades.admin.models import PersistentGradesEnabledFlag, CoursePersistentGradesFlag
 from student.models import CourseEnrollment
 from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
@@ -64,8 +64,6 @@ class GradeTestBase(SharedModuleStoreTestCase):
         self.subsection_grade_factory = SubsectionGradeFactory(self.request.user)
         self.course_structure = get_course_blocks(self.request.user, self.course.location)
         CourseEnrollment.enroll(self.request.user, self.course.id)
-        PersistentGradesEnabledFlag.objects.create(enabled=True)
-        CoursePersistentGradesFlag.objects.create(course_id=course.id, enabled=True)
 
 
 @ddt.ddt

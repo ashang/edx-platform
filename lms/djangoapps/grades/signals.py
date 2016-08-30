@@ -3,7 +3,7 @@ Grades related signals.
 """
 from django.conf import settings
 from django.dispatch import receiver, Signal
-from lms.djangoapps.grades.models import PersistentGradesEnabledFlag
+from lms.djangoapps.grades.admin.models import PersistentGradesEnabledFlag
 from logging import getLogger
 from opaque_keys.edx.locator import CourseLocator
 from opaque_keys.edx.keys import UsageKey
