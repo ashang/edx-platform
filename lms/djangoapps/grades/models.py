@@ -372,7 +372,7 @@ class PersistentGradesEnabledFlag(ConfigurationModel):
         if not PersistentGradesEnabledFlag.is_enabled():
             return False
         elif course_id:
-            return CoursePersistentGradesFlag.objects.get(course_id=course_id).order_by('-fetched_at')[0].enabled
+            return CoursePersistentGradesFlag.objects.get(course_id=course_id).enabled
         return True
 
     class Meta(object):
