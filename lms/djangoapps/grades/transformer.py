@@ -31,7 +31,7 @@ class GradesTransformer(BlockStructureTransformer):
 
         max_score: (numeric)
     """
-    VERSION = 2
+    VERSION = 3
     FIELDS_TO_COLLECT = [u'due', u'format', u'graded', u'has_score', u'weight', u'course_version', u'subtree_edited_on']
 
     @classmethod
