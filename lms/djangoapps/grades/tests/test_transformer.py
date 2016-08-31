@@ -12,7 +12,7 @@ from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import check_mongo_calls
 
 from lms.djangoapps.course_blocks.api import get_course_blocks
-from lms.djangoapps.course_blocks.transformers.tests.helpers import CourseStructureTestCase, BlockParentsMapTestCase
+from lms.djangoapps.course_blocks.transformers.tests.helpers import CourseStructureTestCase
 from openedx.core.djangoapps.content.block_structure.api import get_cache
 from ..transformer import GradesTransformer
 
@@ -171,28 +171,28 @@ class GradesTransformerTestCase(CourseStructureTestCase):
         ])
 
     def test_collect_containing_subsection(self):
-        expected_containing_subsection = {
-            'course': 0,
-            'chapter': 0,
-            'sub_A': 1,
-            'sub_B': 1,
-            'sub_C': 3,
-            'vert_1': 1,
-            'vert_2': 1,
-            'vert_3': 2,
-            'vert_A11': 1,
-            'prob_A1aa': 1,
-            'prob_BCb': 3,
+        expected_containing_subsections = {
+            'course': set(),
+            'chapter': set(),
+            'sub_A': {'sub_A'},
+            'sub_B': {'sub_B'},
+            'sub_C': {'sub_A', 'sub_B', 'sub_C'},
+            'vert_1': {'sub_A'},
+            'vert_2': {'sub_A'},
+            'vert_3': {'sub_A', 'sub_B'},
+            'vert_A11': {'sub_A'},
+            'prob_A1aa': {'sub_A'},
+            'prob_BCb': {'sub_A', 'sub_B', 'sub_C'},
         }
         blocks = self.build_complicated_hypothetical_course()
         block_structure = get_course_blocks(self.student, blocks[u'course'].location, self.transformers)
-        for block_ref, count in expected_containing_subsection.iteritems():
-            actual = block_structure.get_transformer_block_field(
+        for block_ref, expected_subsections in expected_containing_subsections.iteritems():
+            actual_subsections = block_structure.get_transformer_block_field(
                 blocks[block_ref].location,
                 self.TRANSFORMER_CLASS_TO_TEST,
                 'containing_subsections',
             )
-            self.assertEqual(len(actual), count)
+            self.assertEqual(actual_subsections, {blocks[sub].location for sub in expected_subsections})
 
     def test_ungraded_block_collection(self):
         blocks = self.build_course_with_problems()
