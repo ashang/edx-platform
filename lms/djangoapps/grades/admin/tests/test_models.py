@@ -15,7 +15,7 @@ class PersistentGradesFeatureFlagTests(TestCase):
     These are set via Django admin settings.
     """
     def setUp(self):
-        super(PersistentGradesFeatureFlagTests)
+        super(PersistentGradesFeatureFlagTests).setUp()
         self.course_id_1 = CourseLocator(org="edx", course="course", run="run")
         self.course_id_2 = CourseLocator(org="edx", course="course2", run="run")
 
