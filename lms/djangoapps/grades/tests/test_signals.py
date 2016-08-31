@@ -52,7 +52,10 @@ class SubmissionSignalRelayTest(TestCase):
         self.signal_mock = self.setup_patch('lms.djangoapps.grades.signals.signals.SCORE_CHANGED.send', None)
         self.user_mock = MagicMock()
         self.user_mock.id = 42
-        self.get_user_mock = self.setup_patch('lms.djangoapps.grades.signals.handlers.user_by_anonymous_id', self.user_mock)
+        self.get_user_mock = self.setup_patch(
+            'lms.djangoapps.grades.signals.handlers.user_by_anonymous_id',
+            self.user_mock
+        )
 
     def setup_patch(self, function_name, return_value):
         """
