@@ -15,16 +15,16 @@ class PersistentGradesFeatureFlagTests(TestCase):
     These are set via Django admin settings.
     """
     def setUp(self):
-        super(PersistentGradesFeatureFlagTests).setUp()
+        super(PersistentGradesFeatureFlagTests, self).setUp()
         self.course_id_1 = CourseLocator(org="edx", course="course", run="run")
         self.course_id_2 = CourseLocator(org="edx", course="course2", run="run")
 
     def test_global_and_course_enabled(self):
         set_persistent_grades_feature_flags(
             global_flag=True,
-            override_course_settings=False,
+            enabled_for_all_courses=False,
             course_id=self.course_id_1,
-            course_setting=True
+            enabled_for_course=True
         )
         self.assertTrue(PersistentGradesEnabledFlag.feature_enabled())
         self.assertTrue(PersistentGradesEnabledFlag.feature_enabled(self.course_id_1))
@@ -33,9 +33,9 @@ class PersistentGradesFeatureFlagTests(TestCase):
     def test_global_enabled_only(self):
         set_persistent_grades_feature_flags(
             global_flag=True,
-            override_course_settings=False,
+            enabled_for_all_courses=False,
             course_id=self.course_id_1,
-            course_setting=False
+            enabled_for_course=False
         )
         self.assertTrue(PersistentGradesEnabledFlag.feature_enabled())
         self.assertFalse(PersistentGradesEnabledFlag.feature_enabled(self.course_id_1))
@@ -44,9 +44,9 @@ class PersistentGradesFeatureFlagTests(TestCase):
     def test_global_disabled_with_course_enabled(self):
         set_persistent_grades_feature_flags(
             global_flag=False,
-            override_course_settings=False,
+            enabled_for_all_courses=False,
             course_id=self.course_id_1,
-            course_setting=True
+            enabled_for_course=True
         )
         self.assertFalse(PersistentGradesEnabledFlag.feature_enabled())
         self.assertFalse(PersistentGradesEnabledFlag.feature_enabled(self.course_id_1))
@@ -55,9 +55,9 @@ class PersistentGradesFeatureFlagTests(TestCase):
     def test_global_enabled_with_override(self):
         set_persistent_grades_feature_flags(
             global_flag=True,
-            override_course_settings=True,
+            enabled_for_all_courses=True,
             course_id=self.course_id_1,
-            course_setting=True
+            enabled_for_course=True
         )
         self.assertTrue(PersistentGradesEnabledFlag.feature_enabled())
         self.assertTrue(PersistentGradesEnabledFlag.feature_enabled(self.course_id_1))

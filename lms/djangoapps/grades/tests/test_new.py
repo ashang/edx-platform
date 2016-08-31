@@ -91,9 +91,9 @@ class TestCourseGradeFactory(GradeTestBase):
         grade_factory = CourseGradeFactory(self.request.user)
         set_persistent_grades_feature_flags(
             global_flag=feature_flag,
-            override_course_settings=False,
+            enabled_for_all_courses=False,
             course_id=self.course.id,
-            course_setting=course_setting
+            enabled_for_course=course_setting
         )
         with patch('lms.djangoapps.grades.new.course_grade._pretend_to_save_course_grades') as mock_save_grades:
             grade_factory.create(self.course)
@@ -126,9 +126,9 @@ class SubsectionGradeFactoryTest(GradeTestBase):
         """
         set_persistent_grades_feature_flags(
             global_flag=True,
-            override_course_settings=False,
+            enabled_for_all_courses=False,
             course_id=self.course.id,
-            course_setting=True
+            enabled_for_course=True
         )
         with patch(
             'lms.djangoapps.grades.new.subsection_grade.SubsectionGradeFactory._save_grade',
@@ -169,9 +169,9 @@ class SubsectionGradeFactoryTest(GradeTestBase):
         ) as mock_read_saved_grade:
             set_persistent_grades_feature_flags(
                 global_flag=feature_flag,
-                override_course_settings=False,
+                enabled_for_all_courses=False,
                 course_id=self.course.id,
-                course_setting=course_setting
+                enabled_for_course=course_setting
             )
             self.subsection_grade_factory.create(self.sequence, self.course_structure, self.course)
         self.assertEqual(mock_read_saved_grade.called, feature_flag and course_setting)
