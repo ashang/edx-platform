@@ -6,11 +6,13 @@ from logging import getLogger
 from opaque_keys.edx.locator import CourseLocator
 from opaque_keys.edx.keys import UsageKey
 
-from .signals import SCORE_CHANGED
-from .transformer import GradesTransformer
-from .new.subsection_grade import SubsectionGradeFactory
+from submissions.models import score_set, score_reset
 from openedx.core.djangoapps.content.block_structure.api import get_block_structure_manager
 from student.models import user_by_anonymous_id
+
+from .signals import SCORE_CHANGED
+from ..transformer import GradesTransformer
+from ..new.subsection_grade import SubsectionGradeFactory
 
 log = getLogger(__name__)
 
@@ -112,14 +114,13 @@ def recalculate_subsection_grade_handler(sender, **kwargs):  # pylint: disable=u
         course_id = kwargs['course_id']
         usage_id = kwargs['usage_id']
         student = kwargs['user']
-    except KeyError as ex:
+    except KeyError:
         log.exception(
             u"Failed to process SCORE_CHANGED signal, some arguments were missing."
             "user: %s, course_id: %s, usage_id: %s.",
             kwargs.get('user', None),
             kwargs.get('course_id', None),
             kwargs.get('usage_id', None),
-            ex.message
         )
         return
 
@@ -136,4 +137,25 @@ def recalculate_subsection_grade_handler(sender, **kwargs):  # pylint: disable=u
     )
 
     for subsection in subsections_to_update:
-        SubsectionGradeFactory(student).update(usage_key, course_key)
+        SubsectionGradeFactory(student).update(subsection, course_key)
+
+
+def connect_handlers():
+    """
+    Connect signal handlers to the appropriate signals
+
+    `dispatch_uid` prevents handlers from getting registered multiple times
+    """
+
+    SCORE_CHANGED.connect(
+        recalculate_subsection_grade_handler,
+        dispatch_uid=u'grades.recalculate_subsection_grade_handler'
+    )
+    score_set.connect(
+        submissions_score_set_handler,
+        dispatch_uid=u'grades.submissions_score_set_handler'
+    )
+    score_reset.connect(
+        submissions_score_reset_handler,
+        dispatch_uid=u'grades.submissions_score_reset_handler'
+    )
