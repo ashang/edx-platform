@@ -16,11 +16,7 @@ class GradesConfig(AppConfig):
     def ready(self):
         """
         Connect handlers to recalculate grades.
-
-        Redispatch score_set and score_reset signals from submissions API
-        to fire SCORE_CHANGED signal.
         """
         # Can't import models at module level in AppConfigs, and models get
         # included from the signal handlers
-        from .signals import handlers
-        handlers.connect_handlers()
+        from .signals import handlers  # pylint: disable=unused-variable

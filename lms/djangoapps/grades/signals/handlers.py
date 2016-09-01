@@ -1,14 +1,16 @@
 """
 Grades related signals.
 """
-from django.conf import settings
 from logging import getLogger
+
+from django.conf import settings
+from django.dispatch import receiver
+
 from opaque_keys.edx.locator import CourseLocator
 from opaque_keys.edx.keys import UsageKey
-
-from submissions.models import score_set, score_reset
 from openedx.core.djangoapps.content.block_structure.api import get_block_structure_manager
 from student.models import user_by_anonymous_id
+from submissions.models import score_set, score_reset
 
 from .signals import SCORE_CHANGED
 from ..transformer import GradesTransformer
@@ -17,6 +19,7 @@ from ..new.subsection_grade import SubsectionGradeFactory
 log = getLogger(__name__)
 
 
+@receiver(score_set)
 def submissions_score_set_handler(sender, **kwargs):  # pylint: disable=unused-argument
     """
     Consume the score_set signal defined in the Submissions API, and convert it
@@ -59,6 +62,7 @@ def submissions_score_set_handler(sender, **kwargs):  # pylint: disable=unused-a
         )
 
 
+@receiver(score_reset)
 def submissions_score_reset_handler(sender, **kwargs):  # pylint: disable=unused-argument
     """
     Consume the score_reset signal defined in the Submissions API, and convert
@@ -96,6 +100,7 @@ def submissions_score_reset_handler(sender, **kwargs):  # pylint: disable=unused
         )
 
 
+@receiver(SCORE_CHANGED)
 def recalculate_subsection_grade_handler(sender, **kwargs):  # pylint: disable=unused-argument
     """
     Consume the SCORE_CHANGED signal and trigger an update.
@@ -138,24 +143,3 @@ def recalculate_subsection_grade_handler(sender, **kwargs):  # pylint: disable=u
 
     for subsection in subsections_to_update:
         SubsectionGradeFactory(student).update(subsection, course_key)
-
-
-def connect_handlers():
-    """
-    Connect signal handlers to the appropriate signals
-
-    `dispatch_uid` prevents handlers from getting registered multiple times
-    """
-
-    SCORE_CHANGED.connect(
-        recalculate_subsection_grade_handler,
-        dispatch_uid=u'grades.recalculate_subsection_grade_handler'
-    )
-    score_set.connect(
-        submissions_score_set_handler,
-        dispatch_uid=u'grades.submissions_score_set_handler'
-    )
-    score_reset.connect(
-        submissions_score_reset_handler,
-        dispatch_uid=u'grades.submissions_score_reset_handler'
-    )
