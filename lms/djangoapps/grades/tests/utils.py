@@ -2,7 +2,6 @@
 Utilities for grades related tests
 """
 from contextlib import contextmanager
-from lms.djangoapps.grades.models import CoursePersistentGradesFlag, PersistentGradesEnabledFlag
 from mock import patch
 
 
