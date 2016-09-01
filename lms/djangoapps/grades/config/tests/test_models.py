@@ -1,3 +1,7 @@
+"""
+Tests for the models that control the
+persistent grading feature.
+"""
 from django.test import TestCase
 from opaque_keys.edx.locator import CourseLocator
 from lms.djangoapps.grades.config.models import PersistentGradesEnabledFlag

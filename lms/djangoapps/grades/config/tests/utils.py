@@ -1,3 +1,7 @@
+"""
+Provides helper functions for tests that want
+to configure flags related to persistent grading.
+"""
 from lms.djangoapps.grades.config.models import PersistentGradesEnabledFlag, CoursePersistentGradesFlag
 
 
