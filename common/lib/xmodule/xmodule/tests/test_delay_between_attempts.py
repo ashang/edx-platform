@@ -108,6 +108,7 @@ class CapaFactoryWithDelay(object):
             DictFieldData(field_data),
             ScopeIds(None, None, location, location),
         )
+        module.graded = 'True'
 
         if correct:
             # Could set the internal state formally, but here we just jam in the score.
