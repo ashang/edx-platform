@@ -956,7 +956,7 @@ class LoncapaProblem(object):
                 except IndexError:
                     p_tag = None
 
-                if p_tag and len(p_tag.findall('*')) == 0 and p_tag.text is not None:
+                if p_tag is not None and len(p_tag.findall('*')) == 0 and p_tag.text:
                     # It may be possible that label attribute value doesn't match with <p> tag
                     # This happens when author updated the question <p> tag directly in XML but
                     # didn't changed the label attribute value. In this case we will consider the
@@ -990,6 +990,6 @@ class LoncapaProblem(object):
                 description_id += 1
 
             problem_data[inputfields[0].get('id')] = {
-                'label': label.strip(),
+                'label': label.strip() if label else '',
                 'descriptions': descriptions
             }

@@ -299,6 +299,44 @@ class CAPAProblemTest(unittest.TestCase):
             0
         )
 
+    def test_question_title_not_removed_got_children(self):
+        """
+        Verify that <p> question text before responsetype not deleted when
+        it contains other children and label is picked from label attribute of inputtype
+
+        This is the case when author updated the <p> immediately before
+        responsetype to contain other elements. We do not want to delete information in that case.
+        """
+        question = 'Is egg plant a fruit?'
+        xml = """
+        <problem>
+            <p>Choose wisely.</p>
+            <p>Select the correct synonym of paranoid?</p>
+            <p><img src="" /></p>
+            <choiceresponse>
+                <checkboxgroup label="{}">
+                    <choice correct="true">over-suspicious</choice>
+                    <choice correct="false">funny</choice>
+                </checkboxgroup>
+            </choiceresponse>
+        </problem>
+        """.format(question)
+        problem = new_loncapa_problem(xml)
+        self.assertEqual(
+            problem.problem_data,
+            {
+                '1_2_1':
+                {
+                    'label': question,
+                    'descriptions': {}
+                }
+            }
+        )
+        self.assertEqual(
+            len(problem.tree.xpath('//p/img')),
+            1
+        )
+
     def test_multiple_inputtypes(self):
         """
         Verify that group label and labels for individual inputtypes are extracted correctly.
