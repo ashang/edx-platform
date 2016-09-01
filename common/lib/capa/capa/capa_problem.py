@@ -950,21 +950,26 @@ class LoncapaProblem(object):
 
                 label = inputfields[0].attrib['label']
                 # Get first <p> tag before responsetype, this <p> contains the question text.
-                p_tag = response.xpath('preceding-sibling::p[1]')
+                p_tag_list = response.xpath('preceding-sibling::p[1]')
+                try:
+                    p_tag = p_tag_list[0]
+                except IndexError:
+                    p_tag = None
 
-                if p_tag:
+                if p_tag and len(p_tag.findall('*')) == 0 and p_tag.text is not None:
                     # It may be possible that label attribute value doesn't match with <p> tag
                     # This happens when author updated the question <p> tag directly in XML but
                     # didn't changed the label attribute value. In this case we will consider the
                     # first <p> tag before responsetype as question.
-                    if label != p_tag[0].text:
-                        label = p_tag[0].text
-                    element_to_be_deleted = p_tag[0]
+                    if label != p_tag.text:
+                        label = p_tag.text
+
+                    element_to_be_deleted = p_tag
             else:
                 # In this case the problems don't have tag or label attribute inside the responsetype
                 # so we will get the first preceding label tag w.r.t to this responsetype.
                 # This will take care of those multi-question problems that are not using --- in their markdown.
-                label_tag = response.xpath("preceding-sibling::label[1]")
+                label_tag = response.xpath('preceding-sibling::label[1]')
                 if label_tag:
                     label = label_tag[0].text
                     element_to_be_deleted = label_tag[0]
