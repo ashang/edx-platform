@@ -5,7 +5,7 @@ import logging
 
 from django import forms
 
-from lms.djangoapps.grades.models import CoursePersistentGradesFlag
+from lms.djangoapps.grades.config.models import CoursePersistentGradesFlag
 
 from opaque_keys import InvalidKeyError
 from xmodule.modulestore.django import modulestore

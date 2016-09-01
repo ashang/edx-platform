@@ -8,7 +8,7 @@ from mock import patch
 from capa.tests.response_xml_factory import MultipleChoiceResponseXMLFactory
 from courseware.tests.helpers import get_request_for_user
 from lms.djangoapps.course_blocks.api import get_course_blocks
-from lms.djangoapps.grades.tests.utils import set_persistent_grades_feature_flags
+from lms.djangoapps.grades.config.tests.utils import set_persistent_grades_feature_flags
 from student.models import CourseEnrollment
 from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
